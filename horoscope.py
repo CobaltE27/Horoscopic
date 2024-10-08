@@ -1,6 +1,9 @@
 import re
+from enum import Enum
 import datetime
 from pymort import MortXML
+
+Sex = Enum("Sex", ["ALL", "MALE", "FEMALE"])
 
 def getYearMortality(age: int, tableXml: MortXML):
     startingAge = getMinimumAge(tableXml)
@@ -86,19 +89,24 @@ def getTableYear(table: MortXML):
     
     return int(consensus)
 
-
-
-
+def getTableSex(table: MortXML):
+    maleRE = re.compile(r"[^e]male", re.I)
+    femaleRE = re.compile(r"female", re.I)
+    description = str(table.ContentClassification.TableDescription)
+    name = str(table.ContentClassification.TableName)
+    
+    if maleRE.search(name) or maleRE.search(description):
+        return Sex.MALE
+    if femaleRE.search(name) or femaleRE.search(description):
+        return Sex.FEMALE
+    return Sex.ALL
 
 
 print("getting")
 exampleXml = MortXML.from_id(3153)
 exampleLifeTable = MortXML.from_id(2829)
-print("type: " + str(exampleXml.Tables[0].MetaData.DataType))
-print('keywords: ' + str(exampleXml.ContentClassification.KeyWords))
 print('mort metadata: ' + str(exampleXml.Tables[0].MetaData))
 print('life metadata: ' + str(exampleLifeTable.Tables[0].MetaData))
-print('life description: ' + str(exampleLifeTable.ContentClassification.TableDescription))
 print('content type: ' + exampleXml.ContentClassification.ContentType)
 print('data for given age: ' + str(getYearMortality(20, exampleXml)))
 print('chance to die in 80 years at 20: ' + str(getRangeMortality(1, exampleXml, 80)))
@@ -108,3 +116,5 @@ print("fraction outlived by 15 year old: " + str(getYearOutlived(15, exampleLife
 print("fraction outlived by 89 year old: " + str(getYearOutlived(98, exampleLifeTable)))
 print("lifetable year: " + str(getTableYear(exampleLifeTable)))
 print("mort year: " + str(getTableYear(exampleXml)))
+print("mort sex: " + str(getTableSex(exampleXml)))
+print("lifetable sex: " + str(getTableSex(exampleLifeTable)))
