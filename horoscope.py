@@ -1,4 +1,5 @@
 import re
+import datetime
 from pymort import MortXML
 
 def getYearMortality(age: int, tableXml: MortXML):
@@ -54,10 +55,46 @@ def getMaximumAge(tableXml: MortXML):
     else:
         return tableXml.Tables[0].MetaData.AxisDefs[0].MaxScaleValue #less reliable, so only use if description doesn't list it
 
+def getTableYear(table: MortXML):
+    yearRE = re.compile(r"(?:20|19|18)\d\d")
+    matches = dict() #matches ordered by priority
+
+    nameMatch = yearRE.search(str(table.ContentClassification.TableName))
+    if nameMatch:
+        matches[nameMatch.group()] = 1
+    
+    referenceMatch = yearRE.search(str(table.ContentClassification.TableReference))
+    if referenceMatch:
+        if referenceMatch.group() in matches:
+            matches[referenceMatch.group()] = matches[referenceMatch.group()] + 1
+        else:
+            matches[referenceMatch.group()] = 1
+    
+    descriptionMatch = yearRE.search(str(table.ContentClassification.TableDescription))
+    if descriptionMatch:
+        if descriptionMatch.group() in matches:
+            matches[descriptionMatch.group()] = matches[descriptionMatch.group()] + 1
+        else:
+            matches[descriptionMatch.group()] = 1
+    
+    matchKeys = iter(matches.keys())
+    highest = 0 
+    consensus = 0 
+    for key in matchKeys:
+        if matches[key] > highest:
+            consensus = key
+    
+    return int(consensus)
+
+
+
+
+
 
 print("getting")
 exampleXml = MortXML.from_id(3153)
 exampleLifeTable = MortXML.from_id(2829)
+print("type: " + str(exampleXml.Tables[0].MetaData.DataType))
 print('keywords: ' + str(exampleXml.ContentClassification.KeyWords))
 print('mort metadata: ' + str(exampleXml.Tables[0].MetaData))
 print('life metadata: ' + str(exampleLifeTable.Tables[0].MetaData))
@@ -69,3 +106,5 @@ print('chance to die in 110 years at 20: ' + str(getRangeMortality(20, exampleXm
 print("fraction outlived by 10 year old: " + str(getYearOutlived(10, exampleLifeTable)))
 print("fraction outlived by 15 year old: " + str(getYearOutlived(15, exampleLifeTable)))
 print("fraction outlived by 89 year old: " + str(getYearOutlived(98, exampleLifeTable)))
+print("lifetable year: " + str(getTableYear(exampleLifeTable)))
+print("mort year: " + str(getTableYear(exampleXml)))
