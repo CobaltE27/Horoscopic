@@ -139,7 +139,7 @@ def getMaximumAge(tableXml: MortXML):
         return tableXml.Tables[0].MetaData.AxisDefs[0].MaxScaleValue #less reliable, so only use if description doesn't list it
 
 def getTableYear(table: MortXML):
-    yearRE = re.compile(r"(?:20|19|18)\d\d")
+    yearRE = re.compile(r"[21]\d\d\d")
     matches = dict() #matches ordered by priority
 
     nameMatch = yearRE.search(str(table.ContentClassification.TableName))
@@ -183,12 +183,12 @@ def getTableSex(table: MortXML):
 
 
 # with open("mortalities", 'w') as mortalityTables:
-#     mortalityTables.write(json.dumps(GatherTablesOfType("healthy lives mortality"), cls=EnumEncoder, indent=2))
+#     mortalityTables.write(json.dumps(gatherTablesOfType("healthy lives mortality"), cls=EnumEncoder, indent=2))
 # with open("lifeTables", 'w') as lifeTables:
-#     lifeTables.write(json.dumps(GatherTablesOfType("life table"), cls=EnumEncoder, indent=2))
+#     lifeTables.write(json.dumps(gatherTablesOfType("life table"), cls=EnumEncoder, indent=2))
 
 exampleXml = MortXML.from_id(3153)
-exampleLifeTable = MortXML.from_id(2829)
+exampleLifeTable = MortXML.from_id(2718)
 # print(json.dumps(GatherTablesOfType("healthy lives mortality"), cls=EnumEncoder))
 # print(MortXML.from_id(2921).Tables[0].Values.axes[0][0])
 # print("best now: " + str(findBestTableIn("mortalities", Sex.FEMALE)))
