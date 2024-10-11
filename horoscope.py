@@ -26,6 +26,20 @@ def as_enum(d):
         return d
 #enum encoding/decoding from https://stackoverflow.com/questions/24481852/serialising-an-enum-member-to-json/24482806#24482806
 
+def findBestTableIn(filename: str, sex: Sex):
+    with open(filename, "r") as tableJson:
+        mortTables = dict(json.loads(tableJson.read(), object_hook=as_enum))
+    bestId = 0
+    bestDistance = 1000
+    for key in iter(mortTables.keys()):
+        if mortTables[key]["sex"] == sex or mortTables[key]["sex"] == Sex.ALL:
+            continue
+        distance = abs(thisYear - mortTables[key]["year"])
+        if distance < bestDistance:
+            bestId = key
+            bestDistance = distance
+    return bestId
+
 def GatherTablesOfType(contentType: str):
     contentType = contentType.casefold()
     misses = 0
@@ -34,8 +48,10 @@ def GatherTablesOfType(contentType: str):
     while(1):
     #for id in range (3100, 3500):
         print("trying " + str(id))
-        if misses >= 5000: #probably no more tables
-            break
+        if misses >= 1000: #probably no more tables
+            misses = 0
+            if id >= 60000: #at least 60000 tables when project started
+                break
         try:
             table = MortXML.from_id(id) #should throw exception if it doesn't exist
             misses = 0
@@ -147,10 +163,14 @@ def GetTableSex(table: MortXML):
 print("getting")
 exampleXml = MortXML.from_id(3153)
 exampleLifeTable = MortXML.from_id(2829)
-with open("mortalities", 'w') as mortalityTables:
-    mortalityTables.write(json.dumps(GatherTablesOfType("healthy lives mortality"), cls=EnumEncoder))
+# with open("mortalities", 'w') as mortalityTables:
+#     mortalityTables.write(json.dumps(GatherTablesOfType("healthy lives mortality"), cls=EnumEncoder, indent=2))
+# with open("lifeTables", 'w') as lifeTables:
+#     lifeTables.write(json.dumps(GatherTablesOfType("life table"), cls=EnumEncoder, indent=2))
 
 #print(json.dumps(GatherTablesOfType("healthy lives mortality"), cls=EnumEncoder))
+print("best now: " + str(findBestTableIn("mortalities", Sex.FEMALE)))
+print("best life now: " + str(findBestTableIn("lifeTables", Sex.FEMALE)))
 print("mort type: " + str(exampleXml.ContentClassification.ContentType))
 print('mort metadata: ' + str(exampleXml.Tables[0].MetaData))
 print('life metadata: ' + str(exampleLifeTable.Tables[0].MetaData))

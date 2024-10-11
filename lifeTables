@@ -1,0 +1,128 @@
+{
+  "2718": {
+    "year": 2014,
+    "sex": {
+      "__enum__": "Sex.ALL"
+    }
+  },
+  "2745": {
+    "year": 1886,
+    "sex": {
+      "__enum__": "Sex.MALE"
+    }
+  },
+  "2746": {
+    "year": 1886,
+    "sex": {
+      "__enum__": "Sex.FEMALE"
+    }
+  },
+  "2755": {
+    "year": 1843,
+    "sex": {
+      "__enum__": "Sex.MALE"
+    }
+  },
+  "2756": {
+    "year": 1843,
+    "sex": {
+      "__enum__": "Sex.FEMALE"
+    }
+  },
+  "2759": {
+    "year": 1853,
+    "sex": {
+      "__enum__": "Sex.MALE"
+    }
+  },
+  "2760": {
+    "year": 1853,
+    "sex": {
+      "__enum__": "Sex.FEMALE"
+    }
+  },
+  "2763": {
+    "year": 1895,
+    "sex": {
+      "__enum__": "Sex.MALE"
+    }
+  },
+  "2764": {
+    "year": 1895,
+    "sex": {
+      "__enum__": "Sex.FEMALE"
+    }
+  },
+  "2817": {
+    "year": 1806,
+    "sex": {
+      "__enum__": "Sex.ALL"
+    }
+  },
+  "2827": {
+    "year": 1875,
+    "sex": {
+      "__enum__": "Sex.ALL"
+    }
+  },
+  "2829": {
+    "year": 1890,
+    "sex": {
+      "__enum__": "Sex.ALL"
+    }
+  },
+  "2831": {
+    "year": 1883,
+    "sex": {
+      "__enum__": "Sex.ALL"
+    }
+  },
+  "2914": {
+    "year": 1815,
+    "sex": {
+      "__enum__": "Sex.MALE"
+    }
+  },
+  "2915": {
+    "year": 1815,
+    "sex": {
+      "__enum__": "Sex.FEMALE"
+    }
+  },
+  "2921": {
+    "year": 1905,
+    "sex": {
+      "__enum__": "Sex.MALE"
+    }
+  },
+  "2922": {
+    "year": 1905,
+    "sex": {
+      "__enum__": "Sex.FEMALE"
+    }
+  },
+  "2923": {
+    "year": 1905,
+    "sex": {
+      "__enum__": "Sex.MALE"
+    }
+  },
+  "2924": {
+    "year": 1905,
+    "sex": {
+      "__enum__": "Sex.FEMALE"
+    }
+  },
+  "2925": {
+    "year": 1905,
+    "sex": {
+      "__enum__": "Sex.MALE"
+    }
+  },
+  "2926": {
+    "year": 1905,
+    "sex": {
+      "__enum__": "Sex.FEMALE"
+    }
+  }
+}
