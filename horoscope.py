@@ -33,11 +33,10 @@ def findBestTableIn(filename: str, sex: Sex):
     bestDistance = 1000
     for key in iter(mortTables.keys()):
         if mortTables[key]["sex"] == sex or mortTables[key]["sex"] == Sex.ALL:
-            continue
-        distance = abs(thisYear - mortTables[key]["year"])
-        if distance < bestDistance:
-            bestId = key
-            bestDistance = distance
+            distance = abs(thisYear - mortTables[key]["year"])
+            if distance < bestDistance:
+                bestId = key
+                bestDistance = distance
     return bestId
 
 def GatherTablesOfType(contentType: str):
@@ -93,8 +92,15 @@ def GetYearOutlived(age: int, lifeTable: MortXML):
     elif (age < startingAge):
         return 0.0
     else:
+        closestDistance = 1000
+        numAlive = 0
         ageIndex = (age - startingAge) + 1 #data indecies start at 1
-        numAlive = lifeTable.Tables[0].Values["vals"][ageIndex]
+        for table in lifeTable.Tables:
+            for tableAge in table.Values.axes[0]:
+                distance = abs(ageIndex - tableAge)
+                if distance < closestDistance:
+                    closestDistance = distance
+                    numAlive = table.Values["vals"][tableAge]
 
     return (poolSize - numAlive) / poolSize #fraction of pool you've outlived
 
@@ -169,6 +175,7 @@ exampleLifeTable = MortXML.from_id(2829)
 #     lifeTables.write(json.dumps(GatherTablesOfType("life table"), cls=EnumEncoder, indent=2))
 
 #print(json.dumps(GatherTablesOfType("healthy lives mortality"), cls=EnumEncoder))
+print(MortXML.from_id(2921).Tables[0].Values.axes[0][0])
 print("best now: " + str(findBestTableIn("mortalities", Sex.FEMALE)))
 print("best life now: " + str(findBestTableIn("lifeTables", Sex.FEMALE)))
 print("mort type: " + str(exampleXml.ContentClassification.ContentType))
