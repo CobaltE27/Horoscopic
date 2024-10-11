@@ -159,13 +159,15 @@ def getTableYear(table: MortXML):
             matches[descriptionMatch.group()] = matches[descriptionMatch.group()] + 1
         else:
             matches[descriptionMatch.group()] = 1
-    
+    print(matches)
+
     matchKeys = iter(matches.keys())
     highest = 0 
     consensus = 0 
     for key in matchKeys:
         if matches[key] > highest:
             consensus = key
+            highest = matches[key]
     
     return int(consensus)
 
@@ -182,13 +184,13 @@ def getTableSex(table: MortXML):
     return Sex.ALL
 
 
-# with open("mortalities", 'w') as mortalityTables:
-#     mortalityTables.write(json.dumps(gatherTablesOfType("healthy lives mortality"), cls=EnumEncoder, indent=2))
-# with open("lifeTables", 'w') as lifeTables:
-#     lifeTables.write(json.dumps(gatherTablesOfType("life table"), cls=EnumEncoder, indent=2))
+with open("mortalities", 'w') as mortalityTables:
+    mortalityTables.write(json.dumps(gatherTablesOfType("healthy lives mortality"), cls=EnumEncoder, indent=2))
+with open("lifeTables", 'w') as lifeTables:
+    lifeTables.write(json.dumps(gatherTablesOfType("life table"), cls=EnumEncoder, indent=2))
 
-exampleXml = MortXML.from_id(3153)
-exampleLifeTable = MortXML.from_id(2718)
+# exampleXml = MortXML.from_id(3153)
+# exampleLifeTable = MortXML.from_id(2718)
 # print(json.dumps(GatherTablesOfType("healthy lives mortality"), cls=EnumEncoder))
 # print(MortXML.from_id(2921).Tables[0].Values.axes[0][0])
 # print("best now: " + str(findBestTableIn("mortalities", Sex.FEMALE)))
