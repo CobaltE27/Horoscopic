@@ -53,6 +53,7 @@ def findBestTableIn(filename: str, sex: Sex):
             if distance < bestDistance:
                 bestId = key
                 bestDistance = distance
+    print(bestId)
     return bestId
 
 def gatherTablesOfType(contentType: str):
@@ -140,36 +141,26 @@ def getMaximumAge(tableXml: MortXML):
 
 def getTableYear(table: MortXML):
     yearRE = re.compile(r"[21]\d\d\d")
-    matches = dict() #matches ordered by priority
+    matches = list() #matches ordered by priority
 
     nameMatch = yearRE.search(str(table.ContentClassification.TableName))
     if nameMatch:
-        matches[nameMatch.group()] = 1
-    
+        matches.append(int(nameMatch.group()))
     referenceMatch = yearRE.search(str(table.ContentClassification.TableReference))
     if referenceMatch:
-        if referenceMatch.group() in matches:
-            matches[referenceMatch.group()] = matches[referenceMatch.group()] + 1
-        else:
-            matches[referenceMatch.group()] = 1
-    
+        matches.append(int(referenceMatch.group()))
     descriptionMatch = yearRE.search(str(table.ContentClassification.TableDescription))
     if descriptionMatch:
-        if descriptionMatch.group() in matches:
-            matches[descriptionMatch.group()] = matches[descriptionMatch.group()] + 1
-        else:
-            matches[descriptionMatch.group()] = 1
-    print(matches)
+        matches.append(int(descriptionMatch.group()))
 
-    matchKeys = iter(matches.keys())
-    highest = 0 
-    consensus = 0 
-    for key in matchKeys:
-        if matches[key] > highest:
-            consensus = key
-            highest = matches[key]
+    if len(matches) == 0:
+        return 0
+    consensus = matches[0]
+    for match in matches:
+        if match < consensus:
+            consensus = match
     
-    return int(consensus)
+    return consensus
 
 def getTableSex(table: MortXML):
     maleRE = re.compile(r"[^e]male", re.I)
@@ -184,13 +175,13 @@ def getTableSex(table: MortXML):
     return Sex.ALL
 
 
-with open("mortalities", 'w') as mortalityTables:
-    mortalityTables.write(json.dumps(gatherTablesOfType("healthy lives mortality"), cls=EnumEncoder, indent=2))
-with open("lifeTables", 'w') as lifeTables:
-    lifeTables.write(json.dumps(gatherTablesOfType("life table"), cls=EnumEncoder, indent=2))
+# with open("mortalities", 'w') as mortalityTables:
+#     mortalityTables.write(json.dumps(gatherTablesOfType("healthy lives mortality"), cls=EnumEncoder, indent=2))
+# with open("lifeTables", 'w') as lifeTables:
+#     lifeTables.write(json.dumps(gatherTablesOfType("life table"), cls=EnumEncoder, indent=2))
 
-# exampleXml = MortXML.from_id(3153)
-# exampleLifeTable = MortXML.from_id(2718)
+exampleXml = MortXML.from_id(3153)
+exampleLifeTable = MortXML.from_id(2829)
 # print(json.dumps(GatherTablesOfType("healthy lives mortality"), cls=EnumEncoder))
 # print(MortXML.from_id(2921).Tables[0].Values.axes[0][0])
 # print("best now: " + str(findBestTableIn("mortalities", Sex.FEMALE)))
@@ -237,4 +228,5 @@ print("Your chance to die within the decade: " + convertToPercentString(getRange
 print("Your chance to die within the next 3 decades: " + convertToPercentString(getRangeMortality(userAge, mort, 30)))
 print("Your chance to die within the next 6 decades: " + convertToPercentString(getRangeMortality(userAge, mort, 60)))
 print("Your chance to die within the next century: " + convertToPercentString(getRangeMortality(userAge, mort, 100)))
-print("You have outlived approximately " + convertToPercentString(getYearOutlived(userAge, life)) + " of people born under the same circumstances.")
+# print("You have outlived approximately " + convertToPercentString(getYearOutlived(userAge, life)) + " of people born under the same circumstances.")
+print("You have outlived approximately " + convertToPercentString(getRangeMortality(1, mort, userAge)) + " of people born under the same circumstances.")

@@ -1,6 +1,6 @@
 {
   "878": {
-    "year": 1955,
+    "year": 1439,
     "sex": {
       "__enum__": "Sex.ALL"
     }
@@ -354,25 +354,25 @@
     }
   },
   "31001": {
-    "year": 1996,
+    "year": 1332,
     "sex": {
       "__enum__": "Sex.ALL"
     }
   },
   "31002": {
-    "year": 1987,
+    "year": 1972,
     "sex": {
       "__enum__": "Sex.FEMALE"
     }
   },
   "31003": {
-    "year": 1987,
+    "year": 1972,
     "sex": {
       "__enum__": "Sex.MALE"
     }
   },
   "50012": {
-    "year": 1993,
+    "year": 1988,
     "sex": {
       "__enum__": "Sex.ALL"
     }
