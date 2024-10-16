@@ -53,7 +53,7 @@ def findBestTableIn(filename: str, sex: Sex):
             if distance < bestDistance:
                 bestId = key
                 bestDistance = distance
-    print(bestId)
+    # print(bestId)
     return bestId
 
 def gatherTablesOfType(contentType: str):
